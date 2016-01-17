@@ -8,9 +8,9 @@
     [clojure.core.matrix.impl.persistent-vector :as pvector]
     [clojure.core.matrix.utils :as u]
     [clojure.core.matrix.linear :as linear]
-    [clojure.core.matrix.macros #?(:clj :refer :cljs :refer-macros) [error error?]])
-  #?(:clj (:require [clojure.test :refer [deftest is testing]])
-          :cljs (:require [cljs.test :refer-macros [deftest is testing]])))
+    [clojure.core.matrix.macros #?(:clj :refer :cljs :refer-macros) [error error?]]
+    #?(:clj [clojure.test :refer [deftest is testing]]
+       :cljs [cljs.test :refer-macros [deftest is testing]])))
 
 ;; ====================================
 ;; COMPLIANCE TESTING
