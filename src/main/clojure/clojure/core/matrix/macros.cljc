@@ -3,21 +3,38 @@
   macros that can handle the differences between Clojure and Clojurescript."
   (:refer-clojure :exclude [array?]))
 
+(defn- cljs-env?
+  "Take the &env from a macro, and tell whether we are expanding into cljs."
+  [env]
+  (boolean (:ns env)))
+
+(defmacro if-cljs
+  "Return then if we are generating cljs code and else for Clojure code.
+   https://groups.google.com/d/msg/clojurescript/iBY5HaQda4A/w1lAQi9_AwsJ"
+  [then else]
+  (if (cljs-env? &env) then else))
+
 (defmacro error
   "Throws an error with the provided message(s)"
   ([& vals]
-   `(throw (#? (:clj RuntimeException.
-                :cljs js/Error.)
-               (str ~@vals)))))
+   `(if-cljs
+      (throw (js/Error. (str ~@vals)))
+      (throw (RuntimeException. (str ~@vals))))))
 
 (defmacro error?
   "Returns true if executing body throws an error, false otherwise."
   ([& body]
-    `(try
-       ~@body
-       false
-       (catch #?(:clj Throwable :cljs js/Error) t#
-         true))))
+    `(if-cljs
+       (try
+         ~@body
+         false
+         (catch js/Error t#
+           true))
+       (try
+         ~@body
+         false
+         (catch Throwable t#
+           true)))))
 
 ;; useful TODO macro: facilitates searching for TODO while throwing an error at runtime :-)
 (defmacro TODO
