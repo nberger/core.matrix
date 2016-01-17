@@ -6,7 +6,7 @@
             [clojure.core.matrix.implementations :as imp]
             [clojure.core.matrix :as m]
             [clojure.core.matrix.utils :refer [broadcast-shape]]
-   #?@(:clj [[clojure.core.matrix.macros :refer [error]]
+   #?@(:clj [[clojure.core.matrix.macros :refer [error error?]]
              [clojure.test :refer [deftest is testing run-tests]]
              [clojure.core.matrix.demo.examples]]
       :cljs [[cljs.test :refer-macros [deftest is testing run-tests]]
