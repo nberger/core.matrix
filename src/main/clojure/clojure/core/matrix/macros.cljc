@@ -63,17 +63,23 @@
              (recur (next vals#) (inc ~index-sym)))
        nil))))
 
-(defmacro is-object-array? [m]
-  #?(:clj `(instance? ~(Class/forName "[Ljava.lang.Object;") ~m)
-     :cljs `(= js/Array (type ~m))))
+#?(:clj (def object-array-class (Class/forName "[Ljava.lang.Object;")))
 
-(defmacro is-long-array? [m]
-  #?(:clj `(instance? ~(Class/forName "[J") ~m)
-     :cljs `(= js/Array (type ~m))))
+(defn is-object-array? [m]
+  #?(:clj (instance? object-array-class m)
+     :cljs (= js/Array (type m))))
 
-(defmacro is-double-array? [m]
-  #?(:clj `(instance? ~(Class/forName "[D") ~m)
-     :cljs `(= js/Array (type ~m))))
+#?(:clj (def long-array-class (Class/forName "[J")))
+
+(defn is-long-array? [m]
+  #?(:clj (instance? long-array-class m)
+     :cljs (= js/Array (type m))))
+
+#?(:clj (def double-array-class (Class/forName "[D")))
+
+(defn is-double-array? [m]
+  #?(:clj (instance? double-array-class m)
+     :cljs (= js/Array (type m))))
 
 (defmacro c-for
   "C-like loop with nested loops support"
